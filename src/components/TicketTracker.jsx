@@ -48,17 +48,17 @@ export default function TicketTracker({
     }
 
     // 1. Exact match on Ticket ID
-    const exactMatch = tickets.find(t => t.id.toLowerCase() === q);
+    const exactMatch = tickets.find(t => (t.id || '').toLowerCase() === q);
     if (exactMatch) {
       return { selectedTicket: exactMatch, matchedEmailTickets: [] };
     }
 
     // 2. Email query match
     if (q.includes('@')) {
-      const emailMatches = tickets.filter(t => t.requesterEmail.toLowerCase() === q);
+      const emailMatches = tickets.filter(t => (t.requesterEmail || '').toLowerCase() === q);
       if (emailMatches.length > 0) {
         const current = activeSelectedId 
-          ? (emailMatches.find(t => t.id.toLowerCase() === activeSelectedId.toLowerCase()) || emailMatches[0])
+          ? (emailMatches.find(t => (t.id || '').toLowerCase() === activeSelectedId.toLowerCase()) || emailMatches[0])
           : emailMatches[0];
         return { selectedTicket: current, matchedEmailTickets: emailMatches };
       }

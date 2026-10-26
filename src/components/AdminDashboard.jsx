@@ -94,12 +94,12 @@ export default function AdminDashboard({
       // Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const matchesId = ticket.id.toLowerCase().includes(q);
-        const matchesTitle = ticket.title.toLowerCase().includes(q);
-        const matchesDesc = ticket.description.toLowerCase().includes(q);
-        const matchesRequester = ticket.requesterName.toLowerCase().includes(q);
-        const matchesLocation = ticket.location.toLowerCase().includes(q);
-        const matchesEmail = ticket.requesterEmail.toLowerCase().includes(q);
+        const matchesId = (ticket.id || '').toLowerCase().includes(q);
+        const matchesTitle = (ticket.title || '').toLowerCase().includes(q);
+        const matchesDesc = (ticket.description || '').toLowerCase().includes(q);
+        const matchesRequester = (ticket.requesterName || '').toLowerCase().includes(q);
+        const matchesLocation = (ticket.location || '').toLowerCase().includes(q);
+        const matchesEmail = (ticket.requesterEmail || '').toLowerCase().includes(q);
 
         if (!matchesId && !matchesTitle && !matchesDesc && !matchesRequester && !matchesLocation && !matchesEmail) {
           return false;
@@ -124,7 +124,7 @@ export default function AdminDashboard({
         return (priorityWeight[b.priority] || 0) - (priorityWeight[a.priority] || 0);
       }
       if (sortBy === 'title') {
-        return a.title.localeCompare(b.title);
+        return (a.title || '').localeCompare(b.title || '');
       }
       return 0;
     });

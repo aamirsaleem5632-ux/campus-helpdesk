@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function App() {
   // Theme state: 'dark' or 'light'
@@ -9,14 +9,21 @@ export default function App() {
 
   // Initial demo tickets matching reference
   const initialTickets = [
-    { id: 'TICK-1001', name: 'Alex Morgan', studentId: 'STU-2026-8002', email: 'alex@campus.edu', category: 'IT & Campus Wi-Fi', priority: 'High', location: 'Library 2nd Floor', details: 'Wi-Fi keeps dropping connection every 5 minutes.', status: 'Open', date: '2026-10-26 14:10' },
-    { id: 'TICK-1002', name: 'Sarah Jenkins', studentId: 'STU-2026-4412', email: 'sarah@campus.edu', category: 'Classroom AV / Projector', priority: 'Medium', location: 'Auditorium Hall B', details: 'Projector bulb is flickering and dim.', status: 'In Progress', date: '2026-10-26 12:30' },
-    { id: 'TICK-1003', name: 'David Miller', studentId: 'STU-2026-9104', email: 'david@campus.edu', category: 'Maintenance & Facilities', priority: 'Low', location: 'Student Center Cafeteria', details: 'Leaking water tap near the washbasin area.', status: 'Resolved', date: '2026-10-25 09:15' }
+    { id: 'TICK-1001', fullName: 'Alex Morgan', name: 'Alex Morgan', studentId: 'STU-2026-8002', email: 'alex@campus.edu', category: 'IT & Campus Wi-Fi', priority: 'High', location: 'Library 2nd Floor', details: 'Wi-Fi keeps dropping connection every 5 minutes.', status: 'Open', date: '2026-10-26 14:10' },
+    { id: 'TICK-1002', fullName: 'Sarah Jenkins', name: 'Sarah Jenkins', studentId: 'STU-2026-4412', email: 'sarah@campus.edu', category: 'Classroom AV / Projector', priority: 'Medium', location: 'Auditorium Hall B', details: 'Projector bulb is flickering and dim.', status: 'In Progress', date: '2026-10-26 12:30' },
+    { id: 'TICK-1003', fullName: 'David Miller', name: 'David Miller', studentId: 'STU-2026-9104', email: 'david@campus.edu', category: 'Maintenance & Facilities', priority: 'Low', location: 'Student Center Cafeteria', details: 'Leaking water tap near the washbasin area.', status: 'Resolved', date: '2026-10-25 09:15' }
   ];
 
   const [tickets, setTickets] = useState(() => {
     const saved = localStorage.getItem('campus_tickets');
-    return saved ? JSON.parse(saved) : initialTickets;
+    if (!saved) return initialTickets;
+
+    try {
+      return JSON.parse(saved);
+    } catch (error) {
+      console.error('Unable to parse saved campus tickets; using demo data instead.', error);
+      return initialTickets;
+    }
   });
 
   // Form state
@@ -529,7 +536,7 @@ export default function App() {
                         {t.details}
                       </p>
                       <div style={{ fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '6px' }}>
-                        Submitted by <strong>{t.fullName}</strong> ({t.studentId}) on {t.date}
+                        Submitted by <strong>{t.fullName || t.name}</strong> ({t.studentId}) on {t.date}
                       </div>
                     </div>
                   </div>
@@ -593,7 +600,7 @@ export default function App() {
                       </span>
                     </div>
                     <div style={{ fontSize: '12px', color: isDark ? '#9ca3af' : '#6b7280', marginTop: '4px' }}>
-                      Student: {t.fullName} | Status: <strong>{t.status}</strong>
+                      Student: {t.fullName || t.name} | Status: <strong>{t.status}</strong>
                     </div>
                   </div>
 
