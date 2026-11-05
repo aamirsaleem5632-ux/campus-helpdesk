@@ -19,7 +19,11 @@ export default function App() {
     if (!saved) return initialTickets;
 
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+
+      console.error('Saved campus tickets must be an array; using demo data instead.');
+      return initialTickets;
     } catch (error) {
       console.error('Unable to parse saved campus tickets; using demo data instead.', error);
       return initialTickets;
